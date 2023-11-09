@@ -33,10 +33,11 @@ public class RecordController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Map<String, Object>> getAllRecords(@RequestParam(name = "userId") Long userId,
                                                              @RequestParam int page,
-                                                             @RequestParam int size) {
+                                                             @RequestParam int size,
+                                                             @RequestParam(defaultValue = "desc") String sort) {
         try {
             Pageable paging = PageRequest.of(page, size);
-            Page<Record> allRecords = service.getAllRecords(userId, paging);
+            Page<Record> allRecords = service.getAllRecords(userId, sort, paging);
 
             Map<String, Object> response = new HashMap<>();
             response.put("records", allRecords);

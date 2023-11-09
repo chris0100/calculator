@@ -26,12 +26,19 @@ public class RecordServiceImpl implements RecordService {
 
 
     @Override
-    public Page<Record> getAllRecords(Long userId, Pageable paging) {
-        List<Record> recordList = recordRepository.findAllByUserId(userId, paging)
-                .stream()
-                .filter(Record::getOperationResponse)
-                .collect(Collectors.toList());
-
+    public Page<Record> getAllRecords(Long userId, String sort, Pageable paging) {
+        List<Record> recordList;
+        if (sort.equals("desc")){
+            recordList = recordRepository.findAllByUserIdOrderByDateDesc(userId, paging)
+                    .stream()
+                    .filter(Record::getOperationResponse)
+                    .collect(Collectors.toList());
+        }else {
+            recordList = recordRepository.findAllByUserIdOrderByDateAsc(userId, paging)
+                    .stream()
+                    .filter(Record::getOperationResponse)
+                    .collect(Collectors.toList());
+        }
         return new PageImpl<>(recordList);
     }
 

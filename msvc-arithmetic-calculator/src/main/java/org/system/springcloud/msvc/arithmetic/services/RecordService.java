@@ -6,7 +6,7 @@ import org.system.springcloud.msvc.arithmetic.entities.models.Record;
 
 public interface RecordService {
 
-    Page<Record> getAllRecords(Long userId, Pageable paging);
+    Page<Record> getAllRecords(Long userId, String sort, Pageable paging);
     Record removeRecordById(Long id) throws Exception;
 
     Page<Record> getAllRecordsByFilter(Long userId, String filter, Pageable paging);
