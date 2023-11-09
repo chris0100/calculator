@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.system.springcloud.msvc.arithmetic.clients.UserClientRest;
+import org.system.springcloud.msvc.arithmetic.entities.dtos.ValuesDto;
 import org.system.springcloud.msvc.arithmetic.entities.models.Record;
 import org.system.springcloud.msvc.arithmetic.repositories.OperationRepository;
 import org.system.springcloud.msvc.arithmetic.repositories.RecordRepository;
 import org.system.springcloud.msvc.arithmetic.services.OperationService;
+import org.system.springcloud.msvc.arithmetic.utils.Functions;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -22,16 +23,28 @@ public class OperationServiceImpl implements OperationService {
     private final OperationRepository operationRepository;
     private final UserClientRest clientRest;
 
+    private final Functions functions;
+
 
     @Override
-    public Record addition(List<Double> values, Long userId, Long operationId) throws Exception {
+    public Record calculate(ValuesDto values, Long userId, Long operationId) throws Exception {
+        return getRecord(values, userId, operationId);
+    }
+
+    @Override
+    public Record randomString(Long userId, Long operationId) throws Exception {
+        return getRecord(new ValuesDto(), userId, operationId);
+    }
+
+
+    private Record getRecord(ValuesDto values, Long userId, Long operationId) throws Exception {
         String status = clientRest.validateStatusUser(userId).getStatus();
         log.info("userStatus with id {} is {}", userId, status);
 
         if (status.equals("active")){
-            Optional<Record> lastRecordUser = recordRepository.findFirstByUserIdOrderByDateDesc(userId);
+            Optional<Record> lastRecordUser = recordRepository.findFirstByUserIdAndOperationResponseOrderByDateDesc(userId, true);
             int lastUserBalance = getLastUserBalance(lastRecordUser);
-            double operationCost = operationRepository.findById(operationId).orElseThrow(Exception::new).getCost();
+            int operationCost = operationRepository.findById(operationId).orElseThrow(Exception::new).getCost();
 
             if (lastUserBalance < operationCost){
                 throw new Exception("There is not enough user balance to apply the operation");
@@ -39,10 +52,7 @@ public class OperationServiceImpl implements OperationService {
             else {
                 lastUserBalance -= operationCost;
 
-                double amount = values.stream()
-                        .filter(value -> !value.isNaN())
-                        .mapToDouble(value -> value)
-                        .sum();
+                String amount = chooseFunction(values, operationCost);
 
                 Record record = Record.builder()
                         .date(new Date())
@@ -59,15 +69,28 @@ public class OperationServiceImpl implements OperationService {
         } else {
             throw new Exception("User is not active");
         }
-
-
-
     }
 
 
+    private String chooseFunction(ValuesDto values, int operationCost){
+        try{
+            return switch (operationCost) {
+                case 2 -> functions.addition.apply(values.getValueOne(), values.getValueTwo());
+                case 4 -> functions.subtraction.apply(values.getValueOne(), values.getValueTwo());
+                case 6 -> functions.multiplication.apply(values.getValueOne(), values.getValueTwo());
+                case 8 -> functions.division.apply(values.getValueOne(), values.getValueTwo());
+                case 10 -> functions.squareRoot.apply(values.getValueOne());
+                case 12 -> functions.randomString.get();
+                default -> "0";
+            };
+        }catch (Exception e){
+            log.error(e.getLocalizedMessage());
+            return "error";
+        }
+    }
 
 
-    private static int getLastUserBalance(Optional<Record> lastRecordUser) {
+    private int getLastUserBalance(Optional<Record> lastRecordUser) {
         return lastRecordUser.isEmpty() ? 20 : lastRecordUser.get().getUserBalance();
     }
 }

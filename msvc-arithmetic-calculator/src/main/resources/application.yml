@@ -17,3 +17,18 @@ spring:
       hibernate.format_sql: true
     hibernate:
       ddl-auto: create-drop
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: full
+request-random-dto:
+  jsonrpc: 2.0
+  method: generateStrings
+  params:
+    apiKey: ab422961-ddc9-4ad5-80b1-5ad26c8cead4
+    n: 8
+    length: 10
+    characters: abcdefghijklmnopqrstuvwxyz
+    replacement: true
+  id: 42

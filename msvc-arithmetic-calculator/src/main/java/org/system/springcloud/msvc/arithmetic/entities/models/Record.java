@@ -25,7 +25,7 @@ public class Record {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private Double amount;
+    private String amount;
     private Integer userBalance;
     private Boolean operationResponse;
     private Date date;

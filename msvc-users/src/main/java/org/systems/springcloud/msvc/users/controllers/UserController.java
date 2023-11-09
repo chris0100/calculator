@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.systems.springcloud.msvc.users.entities.dtos.UserDto;
 import org.systems.springcloud.msvc.users.services.UserService;
 
 @RestController
