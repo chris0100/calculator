@@ -14,4 +14,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Optional<Record> findFirstByUserIdAndOperationResponseOrderByDateDesc(Long userId, Boolean operationResponse);
 
     Page<Record> findAllByUserId(Long userId, Pageable pageable);
+
+    Page<Record> findAllByUserIdAndOperationId(Long userId, Long operationId, Pageable pageable);
+
 }

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long> {
+
+    Operation findByTypeContainingIgnoreCase(String filter);
 }

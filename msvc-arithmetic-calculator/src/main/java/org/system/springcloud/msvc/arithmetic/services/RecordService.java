@@ -9,4 +9,5 @@ public interface RecordService {
     Page<Record> getAllRecords(Long userId, Pageable paging);
     Record removeRecordById(Long id) throws Exception;
 
+    Page<Record> getAllRecordsByFilter(Long userId, String filter, Pageable paging);
 }

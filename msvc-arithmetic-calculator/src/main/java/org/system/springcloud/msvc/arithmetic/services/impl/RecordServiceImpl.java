@@ -59,5 +59,18 @@ public class RecordServiceImpl implements RecordService {
         throw new Exception();
     }
 
+    @Override
+    public Page<Record> getAllRecordsByFilter(Long userId, String filter, Pageable paging) {
+        //look for the operationId
+        Long idOperation = operationRepository.findByTypeContainingIgnoreCase(filter).getId();
+
+        List<Record> recordList = recordRepository.findAllByUserIdAndOperationId(userId, idOperation, paging)
+                .stream()
+                .filter(Record::getOperationResponse)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(recordList);
+    }
+
 
 }
