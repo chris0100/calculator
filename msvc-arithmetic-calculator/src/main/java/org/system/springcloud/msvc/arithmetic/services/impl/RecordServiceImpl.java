@@ -1,6 +1,9 @@
 package org.system.springcloud.msvc.arithmetic.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.system.springcloud.msvc.arithmetic.entities.models.Operation;
 import org.system.springcloud.msvc.arithmetic.entities.models.Record;
@@ -23,11 +26,13 @@ public class RecordServiceImpl implements RecordService {
 
 
     @Override
-    public List<Record> getAllRecords(Long userId) {
-        return recordRepository.findAllByUserId(userId)
+    public Page<Record> getAllRecords(Long userId, Pageable paging) {
+        List<Record> recordList = recordRepository.findAllByUserId(userId, paging)
                 .stream()
                 .filter(Record::getOperationResponse)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(recordList);
     }
 
     @Override
@@ -49,7 +54,6 @@ public class RecordServiceImpl implements RecordService {
                 lastRecordInList.setUserBalance(lastRecordInList.getUserBalance() + costOperation);
                 recordRepository.save(lastRecordInList);
             }
-
             return recordRemoved;
         }
         throw new Exception();

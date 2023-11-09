@@ -2,6 +2,9 @@ package org.system.springcloud.msvc.arithmetic.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.system.springcloud.msvc.arithmetic.services.OperationService;
+import org.system.springcloud.msvc.arithmetic.entities.models.Record;
 import org.system.springcloud.msvc.arithmetic.services.RecordService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -26,12 +32,23 @@ public class RecordController {
 
     @GetMapping(path = "/record", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getAllRecords(@RequestParam(name = "userId") Long userId){
+    public ResponseEntity<Map<String, Object>> getAllRecords(@RequestParam(name = "userId") Long userId,
+                                                             @RequestParam int page,
+                                                             @RequestParam int size){
         try {
-            return ResponseEntity.ok(service.getAllRecords(userId));
+            Pageable paging = PageRequest.of(page, size);
+            Page<Record> allRecords = service.getAllRecords(userId, paging);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("records", allRecords);
+            response.put("currentPage", allRecords.getNumber());
+            response.put("totalItems", allRecords.getTotalElements());
+            response.put("totalPages", allRecords.getTotalPages());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("not found exception ");
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_FOUND);
         }
     }
 

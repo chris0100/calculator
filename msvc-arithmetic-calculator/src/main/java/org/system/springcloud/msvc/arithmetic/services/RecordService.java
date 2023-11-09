@@ -1,13 +1,12 @@
 package org.system.springcloud.msvc.arithmetic.services;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.system.springcloud.msvc.arithmetic.entities.models.Record;
-
-import java.util.List;
 
 public interface RecordService {
 
-    List<Record> getAllRecords(Long userId);
+    Page<Record> getAllRecords(Long userId, Pageable paging);
     Record removeRecordById(Long id) throws Exception;
 
 }
