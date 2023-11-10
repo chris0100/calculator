@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: ${PORT:8001}
 spring:
   application:
     name: msvc-arithmetic-calculator
@@ -17,11 +17,6 @@ spring:
       hibernate.format_sql: true
     hibernate:
       ddl-auto: create-drop
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: full
 request-random-dto:
   jsonrpc: 2.0
   method: generateStrings
@@ -32,3 +27,6 @@ request-random-dto:
     characters: abcdefghijklmnopqrstuvwxyz
     replacement: true
   id: 42
+msvc:
+  users:
+    url: ${USERS_URL:msvc-users:8002}
