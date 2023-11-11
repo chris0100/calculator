@@ -23,7 +23,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/arithmetic")
 public class RecordController {
 
     private final RecordService service;

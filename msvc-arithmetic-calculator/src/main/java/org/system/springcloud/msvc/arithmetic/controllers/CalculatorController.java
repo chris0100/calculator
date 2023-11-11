@@ -18,7 +18,7 @@ import org.system.springcloud.msvc.arithmetic.services.OperationService;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/arithmetic")
 public class CalculatorController {
 
     private final OperationService service;

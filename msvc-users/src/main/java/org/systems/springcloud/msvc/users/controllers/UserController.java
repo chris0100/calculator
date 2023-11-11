@@ -14,7 +14,7 @@ import org.systems.springcloud.msvc.users.services.UserService;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService service;

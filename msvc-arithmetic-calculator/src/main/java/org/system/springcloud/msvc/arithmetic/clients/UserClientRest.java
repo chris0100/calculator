@@ -8,6 +8,6 @@ import org.system.springcloud.msvc.arithmetic.entities.dtos.UserDto;
 @FeignClient(url = "${msvc.users.url}", name = "msvc-users")
 public interface UserClientRest {
 
-    @GetMapping("/api/validateStatus/{userId}")
+    @GetMapping("/api/users/validateStatus/{userId}")
     UserDto validateStatusUser(@PathVariable Long userId);
 }

@@ -11,7 +11,7 @@ import org.system.springcloud.msvc.arithmetic.repositories.RecordRepository;
 import org.system.springcloud.msvc.arithmetic.services.OperationService;
 import org.system.springcloud.msvc.arithmetic.utils.Functions;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -28,16 +28,16 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public Record calculate(ValuesDto values, Long userId, Long operationId) throws Exception {
-        return getRecord(values, userId, operationId);
+        return saveRecord(values, userId, operationId);
     }
 
     @Override
     public Record randomString(Long userId, Long operationId) throws Exception {
-        return getRecord(new ValuesDto(), userId, operationId);
+        return saveRecord(new ValuesDto(), userId, operationId);
     }
 
 
-    private Record getRecord(ValuesDto values, Long userId, Long operationId) throws Exception {
+    private Record saveRecord(ValuesDto values, Long userId, Long operationId) throws Exception {
         String status = clientRest.validateStatusUser(userId).getStatus();
         log.info("userStatus with id {} is {}", userId, status);
 
@@ -55,7 +55,7 @@ public class OperationServiceImpl implements OperationService {
                 String amount = chooseFunction(values, operationCost);
 
                 Record record = Record.builder()
-                        .date(new Date())
+                        .date(LocalDateTime.now())
                         .amount(amount)
                         .operationResponse(true)
                         .userBalance(lastUserBalance)
