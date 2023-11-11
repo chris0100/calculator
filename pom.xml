@@ -19,6 +19,7 @@
     <modules>
         <module>msvc-arithmetic-calculator</module>
         <module>msvc-users</module>
+        <module>msvc-registry</module>
     </modules>
 
     <properties>

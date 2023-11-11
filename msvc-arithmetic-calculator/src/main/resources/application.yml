@@ -30,3 +30,7 @@ request-random-dto:
 msvc:
   users:
     url: ${USERS_URL:msvc-users:8002}
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
