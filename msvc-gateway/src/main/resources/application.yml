@@ -9,11 +9,6 @@ spring:
           predicates:
             - Path=/api/arithmetic/**
 
-        - id: msvc-users
-          uri: lb://MSVC-USERS
-          predicates:
-            - Path=/api/users/**
-
 eureka:
   client:
     service-url:

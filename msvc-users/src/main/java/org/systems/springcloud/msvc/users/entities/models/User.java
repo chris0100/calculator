@@ -3,6 +3,7 @@ package org.systems.springcloud.msvc.users.entities.models;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -29,14 +31,6 @@ public class User {
     private String password;
 
     private String status;
-
-    @Transient
-    private List<Record> records;
-
-
-    public User(){
-        records = new ArrayList<>();
-    }
 
 
 }

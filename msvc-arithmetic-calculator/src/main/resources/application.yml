@@ -29,7 +29,7 @@ request-random-dto:
   id: 42
 msvc:
   users:
-    url: ${USERS_URL:localhost:8080}
+    url: ${USERS_URL:localhost:8002}
 eureka:
   client:
     service-url:

@@ -1,4 +1,4 @@
-package org.system.springcloud.msvc.arithmetic.entities.dtos;
+package org.systems.springcloud.msvc.users.entities.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserStatusDto {
 
     private String status;
 }
