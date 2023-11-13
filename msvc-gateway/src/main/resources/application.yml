@@ -8,6 +8,13 @@ spring:
           uri: lb://MSVC-ARITHMETIC-CALCULATOR
           predicates:
             - Path=/api/arithmetic/**
+          filters:
+            - AuthenticationFilter
+
+        - id: msvc-users
+          uri: lb://MSVC-USERS
+          predicates:
+            - Path=/api/users/**
 
 eureka:
   client:
