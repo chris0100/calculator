@@ -27,9 +27,9 @@ public class CalculatorController {
 
     @PostMapping(path = "/calculate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> addition(@RequestBody ValuesDto values,
-                                      @RequestParam(name = "userId") Long userId,
-                                      @RequestParam(name = "operationId") Long operationId){
+    public ResponseEntity<?> calculate(@RequestBody ValuesDto values,
+                                       @RequestParam(name = "userId") Long userId,
+                                       @RequestParam(name = "operationId") Long operationId){
         try {
             return ResponseEntity.ok(service.calculate(values, userId, operationId));
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class CalculatorController {
     @GetMapping(path = "/randomString", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> randomString(@RequestParam(name = "userId") Long userId,
-                                        @RequestParam(name = "operationId") Long operationId){
+                                                  @RequestParam(name = "operationId") Long operationId){
         try {
             return ResponseEntity.ok(service.randomString(userId, operationId));
         } catch (Exception e) {

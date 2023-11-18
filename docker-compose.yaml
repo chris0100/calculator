@@ -10,6 +10,9 @@ services:
     networks:
       - calculator
     restart: always
+    depends_on:
+      - msvc-gateway
+      - msvc-registry
 
   msvc-arithmetic-calculator:
     container_name: msvc-arithmetic-calculator
@@ -19,6 +22,36 @@ services:
       - "8001:8001"
     env_file:
       - ./msvc-arithmetic-calculator/.env
+    networks:
+      - calculator
+    restart: always
+    depends_on:
+      - msvc-gateway
+      - msvc-registry
+
+  msvc-gateway:
+    container_name: msvc-gateway
+    platform: linux/amd64
+    image: chris0100eka/gateway:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - calculator
+    restart: always
+    depends_on:
+      - msvc-registry
+
+  msvc-registry:
+    container_name: msvc-registry
+    platform: linux/amd64
+    image: chris0100eka/registry:latest
+    ports:
+      - "8761:8761"
+    environment:
+      server.port: 8761
+      eureka.client.enabled: 'true'
+      eureka.host: eureka-server
+      eureka.instance.preferIpAddress: 'true'
     networks:
       - calculator
     restart: always

@@ -29,8 +29,8 @@ request-random-dto:
   id: 42
 msvc:
   users:
-    url: ${USERS_URL:localhost:8002}
+    url: ${USERS_URL:msvc-users:8002}
 eureka:
   client:
     service-url:
-      defaultZone : http://localhost:8761/eureka/
+      defaultZone : http://msvc-registry:8761/eureka/

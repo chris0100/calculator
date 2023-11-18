@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.system.springcloud.msvc.arithmetic.clients.UserClientRest;
+import org.system.springcloud.msvc.arithmetic.entities.dtos.RecordDto;
 import org.system.springcloud.msvc.arithmetic.entities.dtos.ValuesDto;
+import org.system.springcloud.msvc.arithmetic.entities.mapper.RecordMapper;
 import org.system.springcloud.msvc.arithmetic.entities.models.Record;
 import org.system.springcloud.msvc.arithmetic.repositories.OperationRepository;
 import org.system.springcloud.msvc.arithmetic.repositories.RecordRepository;
@@ -25,19 +27,21 @@ public class OperationServiceImpl implements OperationService {
 
     private final Functions functions;
 
+    private final RecordMapper mapper;
+
 
     @Override
-    public Record calculate(ValuesDto values, Long userId, Long operationId) throws Exception {
+    public RecordDto calculate(ValuesDto values, Long userId, Long operationId) throws Exception {
         return saveRecord(values, userId, operationId);
     }
 
     @Override
-    public Record randomString(Long userId, Long operationId) throws Exception {
+    public RecordDto randomString(Long userId, Long operationId) throws Exception {
         return saveRecord(new ValuesDto(), userId, operationId);
     }
 
 
-    private Record saveRecord(ValuesDto values, Long userId, Long operationId) throws Exception {
+    private RecordDto saveRecord(ValuesDto values, Long userId, Long operationId) throws Exception {
         String status = clientRest.validateStatusUser(userId).getStatus();
         log.info("userStatus with id {} is {}", userId, status);
 
@@ -64,7 +68,8 @@ public class OperationServiceImpl implements OperationService {
                         .build();
 
                 recordRepository.save(record);
-                return record;
+                RecordDto recordDto = mapper.recordToRecordDto(record);
+                return recordDto;
             }
         } else {
             throw new Exception("User is not active");
