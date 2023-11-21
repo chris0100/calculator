@@ -29,24 +29,14 @@ public class CalculatorController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> calculate(@RequestBody ValuesDto values,
                                        @RequestParam(name = "userId") Long userId,
-                                       @RequestParam(name = "operationId") Long operationId){
-        try {
+                                       @RequestParam(name = "operationId") Long operationId) throws Exception {
             return ResponseEntity.ok(service.calculate(values, userId, operationId));
-        } catch (Exception e) {
-            log.error("not found exception ");
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 
     @GetMapping(path = "/randomString", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> randomString(@RequestParam(name = "userId") Long userId,
-                                                  @RequestParam(name = "operationId") Long operationId){
-        try {
+                                                  @RequestParam(name = "operationId") Long operationId) throws Exception {
             return ResponseEntity.ok(service.randomString(userId, operationId));
-        } catch (Exception e) {
-            log.error("not found exception ");
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 }

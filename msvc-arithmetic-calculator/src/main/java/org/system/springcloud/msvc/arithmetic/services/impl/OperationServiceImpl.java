@@ -8,6 +8,9 @@ import org.system.springcloud.msvc.arithmetic.entities.dtos.RecordDto;
 import org.system.springcloud.msvc.arithmetic.entities.dtos.ValuesDto;
 import org.system.springcloud.msvc.arithmetic.entities.mapper.RecordMapper;
 import org.system.springcloud.msvc.arithmetic.entities.models.Record;
+import org.system.springcloud.msvc.arithmetic.error.FunctionNotAppliedException;
+import org.system.springcloud.msvc.arithmetic.error.NotEnoughBalanceException;
+import org.system.springcloud.msvc.arithmetic.error.UserNotActiveException;
 import org.system.springcloud.msvc.arithmetic.repositories.OperationRepository;
 import org.system.springcloud.msvc.arithmetic.repositories.RecordRepository;
 import org.system.springcloud.msvc.arithmetic.services.OperationService;
@@ -51,7 +54,7 @@ public class OperationServiceImpl implements OperationService {
             int operationCost = operationRepository.findById(operationId).orElseThrow(Exception::new).getCost();
 
             if (lastUserBalance < operationCost){
-                throw new Exception("There is not enough user balance to apply the operation");
+                throw new NotEnoughBalanceException("There is not enough user balance to apply the operation");
             }
             else {
                 lastUserBalance -= operationCost;
@@ -68,11 +71,10 @@ public class OperationServiceImpl implements OperationService {
                         .build();
 
                 recordRepository.save(record);
-                RecordDto recordDto = mapper.recordToRecordDto(record);
-                return recordDto;
+                return mapper.recordToRecordDto(record);
             }
         } else {
-            throw new Exception("User is not active");
+            throw new UserNotActiveException("the user is not active");
         }
     }
 
@@ -90,7 +92,7 @@ public class OperationServiceImpl implements OperationService {
             };
         }catch (Exception e){
             log.error(e.getLocalizedMessage());
-            return "error";
+            throw new FunctionNotAppliedException("The function cannot be applied, please try later");
         }
     }
 

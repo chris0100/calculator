@@ -35,21 +35,15 @@ public class RecordController {
                                                              @RequestParam int page,
                                                              @RequestParam int size,
                                                              @RequestParam(defaultValue = "desc") String sort) {
-        try {
-            Pageable paging = PageRequest.of(page, size);
-            Page<Record> allRecords = service.getAllRecords(userId, sort, paging);
+        Pageable paging = PageRequest.of(page, size);
+        Page<Record> allRecords = service.getAllRecords(userId, sort, paging);
+        Map<String, Object> response = new HashMap<>();
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("records", allRecords);
-            response.put("currentPage", allRecords.getNumber());
-            response.put("totalItems", allRecords.getTotalElements());
-            response.put("totalPages", allRecords.getTotalPages());
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("not found exception ");
-            return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_FOUND);
-        }
+        response.put("records", allRecords);
+        response.put("currentPage", allRecords.getNumber());
+        response.put("totalItems", allRecords.getTotalElements());
+        response.put("totalPages", allRecords.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -59,33 +53,22 @@ public class RecordController {
                                                                      @RequestParam int page,
                                                                      @RequestParam int size,
                                                                      @RequestParam String filter) {
-        try {
-            Pageable paging = PageRequest.of(page, size);
-            Page<Record> allRecords = service.getAllRecordsByFilter(userId, filter, paging);
+        Pageable paging = PageRequest.of(page, size);
+        Page<Record> allRecords = service.getAllRecordsByFilter(userId, filter, paging);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("records", allRecords);
-            response.put("currentPage", allRecords.getNumber());
-            response.put("totalItems", allRecords.getTotalElements());
-            response.put("totalPages", allRecords.getTotalPages());
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("not found exception ");
-            return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_FOUND);
-        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("records", allRecords);
+        response.put("currentPage", allRecords.getNumber());
+        response.put("totalItems", allRecords.getTotalElements());
+        response.put("totalPages", allRecords.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @DeleteMapping(path = "/record", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> removeRecordById(@RequestParam(name = "recordId") Long recordId) {
-        try {
+    public ResponseEntity<?> removeRecordById(@RequestParam(name = "recordId") Long recordId) throws Exception {
             return ResponseEntity.ok(service.removeRecordById(recordId));
-        } catch (Exception e) {
-            log.error("not found exception ");
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
     }
 
 }

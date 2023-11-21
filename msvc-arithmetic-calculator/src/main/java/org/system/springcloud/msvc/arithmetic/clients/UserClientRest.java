@@ -9,5 +9,5 @@ import org.system.springcloud.msvc.arithmetic.entities.dtos.UserStatusDto;
 public interface UserClientRest {
 
     @GetMapping("/api/users/validateStatus/{userId}")
-    UserStatusDto validateStatusUser(@PathVariable Long userId);
+    UserStatusDto validateStatusUser(@PathVariable(name = "userId") Long userId);
 }
