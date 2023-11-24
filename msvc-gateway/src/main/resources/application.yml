@@ -3,6 +3,15 @@ spring:
     name: msvc-gateway
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+            allowCredentials: true
       routes:
         - id: msvc-arithmetic-calculator
           uri: lb://MSVC-ARITHMETIC-CALCULATOR
@@ -15,6 +24,8 @@ spring:
           uri: lb://MSVC-USERS
           predicates:
             - Path=/api/users/**
+          filters:
+            - AddResponseHeader=Access-Control-Allow-Origin, *
 
 eureka:
   client:
