@@ -20,12 +20,13 @@ import org.systems.springcloud.msvc.users.entities.dtos.AuthRequest;
 import org.systems.springcloud.msvc.users.entities.dtos.ResponseTokenDTO;
 import org.systems.springcloud.msvc.users.entities.dtos.UserDto;
 import org.systems.springcloud.msvc.users.entities.models.User;
+import org.systems.springcloud.msvc.users.error.UserNotAuthenticatedException;
 import org.systems.springcloud.msvc.users.services.UserService;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http:localhost:4200","*"})
+@CrossOrigin(origins = {"http:localhost:4200", "*"})
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -34,38 +35,31 @@ public class UserController {
 
 
     @GetMapping(path = "/validateStatus/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> validateStatusUser(@PathVariable Long userId){
-        try {
-            return ResponseEntity.ok(service.getStatusUser(userId));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> validateStatusUser(@PathVariable Long userId) throws Exception {
+        return ResponseEntity.ok(service.getStatusUser(userId));
     }
 
     @PostMapping(path = "/auth/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addNewUser(@RequestBody UserDto userDto){
+    public ResponseEntity<?> addNewUser(@RequestBody UserDto userDto) {
         return new ResponseEntity<>(service.saveUser(userDto), HttpStatus.OK);
     }
 
     @PostMapping(path = "/auth/token")
-    public ResponseEntity<?> getToken(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<?> getToken(@RequestBody AuthRequest authRequest) {
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        if (authenticate.isAuthenticated()){
+        if (authenticate.isAuthenticated()) {
             return ResponseEntity.ok(ResponseTokenDTO.builder()
-                            .token(service.generateToken(authRequest.getUsername())).build());
-        }
-        else{
-            throw new RuntimeException("invalid access");
+                    .token(service.generateToken(authRequest.getUsername())).build());
+        } else {
+            throw new UserNotAuthenticatedException("User is not authenticated");
         }
     }
 
     @GetMapping(path = "/auth/validateToken")
-    public ResponseEntity<?> validateToken(@RequestParam String token){
+    public ResponseEntity<?> validateToken(@RequestParam String token) {
         service.validateToken(token);
         return ResponseEntity.ok().build();
     }
-
-
 
 
 }

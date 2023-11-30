@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.system.springcloud.msvc.arithmetic.entities.dtos.RecordDto;
 import org.system.springcloud.msvc.arithmetic.entities.dtos.ValuesDto;
 import org.system.springcloud.msvc.arithmetic.entities.models.Record;
+import org.system.springcloud.msvc.arithmetic.error.UserNotActiveException;
 import org.system.springcloud.msvc.arithmetic.services.impl.OperationServiceImpl;
 
 import java.time.LocalDateTime;
@@ -64,7 +65,7 @@ class CalculatorControllerTest {
                 .valueTwo(2D)
                 .build();
 
-        given(operationService.calculate(valuesDto, 1L,1L)).willThrow(new Exception());
+        given(operationService.calculate(valuesDto, 1L,1L)).willThrow(new UserNotActiveException("the user is not active"));
 
         mockMvc.perform(post("/api/arithmetic/calculate")
                         .param("userId", "1")
