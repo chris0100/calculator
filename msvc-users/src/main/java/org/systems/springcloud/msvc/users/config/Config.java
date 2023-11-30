@@ -45,7 +45,7 @@ public class Config {
                 .authorizeHttpRequests()
                 .antMatchers("/api/users/auth/register").permitAll()
                 .antMatchers("/api/users/auth/token").permitAll()
-                .antMatchers("/api/users/auth/validate").permitAll()
+                .antMatchers("/api/users/auth/validateToken").permitAll()
                 .antMatchers("/api/users/validateStatus").permitAll()
                 .and()
                 .cors().configurationSource(corsConfigurationSource())
