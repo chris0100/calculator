@@ -6,7 +6,7 @@ import org.systems.springcloud.msvc.users.entities.models.User;
 
 public interface UserService {
     UserStatusDto getStatusUser(Long userId) throws Exception;
-    String saveUser(UserDto user);
+    UserDto saveUser(UserDto user);
     String generateToken(String username);
     void validateToken(String token);
 }

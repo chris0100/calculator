@@ -39,12 +39,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String saveUser(UserDto user) {
+    public UserDto saveUser(UserDto user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             User userDB = mapper.map(user, User.class);
-            userRepository.save(userDB);
-            return "User added to the system";
+            return mapper.map(userRepository.save(userDB), UserDto.class);
         } catch (Exception e) {
             throw new SaveUserException("There is an error saving the user");
         }

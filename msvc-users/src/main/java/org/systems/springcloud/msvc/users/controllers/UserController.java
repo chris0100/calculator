@@ -55,7 +55,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/auth/validateToken")
+    @GetMapping(path = "/auth/validate")
     public ResponseEntity<?> validateToken(@RequestParam String token) {
         service.validateToken(token);
         return ResponseEntity.ok().build();
