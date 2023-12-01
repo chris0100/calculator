@@ -36,3 +36,6 @@ msvc-arithmetic-calculator/.mvn
 msvc-arithmetic-calculator/mvnw
 msvc-arithmetic-calculator/mvnw.cmd
 msvc-users/mvnw
+msvc-registry/mvnw
+msvc-gateway/mvnw
+*.cmd
